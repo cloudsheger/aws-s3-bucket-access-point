@@ -1,0 +1,46 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DenyAccessFromSpecificVPCAndIP",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::cross-me-24",
+                "arn:aws:s3:::cross-me-24/*",
+                "arn:aws:s3:::cross-me-24/data",
+                "arn:aws:s3:::cross-me-24/data/*"
+            ],
+            "Condition": {
+                "NotIpAddress": {
+                    "aws:VpcSourceIp": "xxxxx/16"
+                },
+                "StringNotEquals": {
+                    "aws:sourceVpc": "vpc-xxxxxx"
+                }
+            }
+        },
+        {
+            "Sid": "AllowFullAccessToAccountA",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::xxxxxxx:root"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::cross-me-24",
+                "arn:aws:s3:::cross-me-24/*",
+                "arn:aws:s3:::cross-me-24/data",
+                "arn:aws:s3:::cross-me-24/data/*"
+            ]
+        }
+    ]
+}
